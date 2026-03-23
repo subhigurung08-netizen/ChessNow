@@ -263,20 +263,36 @@ default:
 }
 }
 
-Move GetBestMove()
+void BestMove()
 {
-Debug.Log("getting best move");
-Minimax(manager.board, 1, false);
-Debug.Log("minimax done");
+    Debug.Log("getting best move");
+    if(bestMoves==null)
+    {
+        return;
+    }
+
+    Minimax(manager.board, 1, false);
+    Debug.Log("minimax done");
+    if(undoSimulation!= null)
+    {
 foreach(Move m in undoSimulation)
 {
+    if(m.piece == null || m.position == null)
+    {
+        continue;
+    }
     manager.Move(m.piece, m.position);
 }
+}
 Debug.Log("similated moves undone");
-List<Move> tempMoves = bestMoves;
-bestMoves.Clear();
-Debug.Log("bestMoves cleared");
-return tempMoves[0];
+
+    List<Move> tempMoves = bestMoves;
+    bestMoves.Clear();
+    Debug.Log("bestMoves cleared");
+    
+manager.Move(tempMoves[0].piece, tempMoves[0].position);
+
+    
 }
 
 
