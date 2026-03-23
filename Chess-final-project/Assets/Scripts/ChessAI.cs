@@ -144,10 +144,10 @@ if (depth == 0) {       return EvaluateBoard(board);}   //base case
     {
             
             Debug.Log("getting legal moves");
-            if(manager.GridForPiece(piece).Equals(null) || piece.Equals(null))
-            {
-                continue;
-            }
+            // if(piece.Equals(null) || manager.GridForPiece(piece).Equals(null))
+            // {
+            //     continue;
+            // }
             Move undo = new Move(piece, manager.GridForPiece(piece));
             Debug.Log("got to og position");
             
@@ -163,18 +163,21 @@ if (depth == 0) {       return EvaluateBoard(board);}   //base case
             foreach (Vector2Int pos in positions)
             {
                 Debug.Log("elo4");
-                Move move = new Move(piece, pos);
-                Debug.Log("elo5");
-                if(legalMoves!=null)
+                if(!piece.Equals(null) && !pos.Equals(null))
                 {
-                    legalMoves.Add(move);
+                    Move move = new Move(piece, pos);
+                    Debug.Log("elo5");
+                    if(legalMoves!=null)
+                    {
+                        legalMoves.Add(move);
+                    }
                 }
                 Debug.Log("elo6");
 
 
             }
     }
-Debug.Log("elo7");
+Debug.Log("elo7 finished legalMoves");
 return legalMoves;
    }
 

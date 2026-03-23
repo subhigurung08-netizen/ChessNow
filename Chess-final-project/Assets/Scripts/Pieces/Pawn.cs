@@ -44,6 +44,7 @@ public class Pawn : Piece
         
         GameManager gM = new GameManager();
         
+        
         int forwardDirection = 1;
         List<Vector2Int> locations = new List<Vector2Int>();
         
