@@ -243,6 +243,7 @@ public class GameManager : MonoBehaviour
 
     public Vector2Int GridForPiece(GameObject piece)
     {
+        Debug.Log("getting grid for piece");
         for (int i = 0; i < 8; i++) 
         {
             for (int j = 0; j < 8; j++)

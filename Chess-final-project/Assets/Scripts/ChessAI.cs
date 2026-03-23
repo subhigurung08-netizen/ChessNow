@@ -7,7 +7,10 @@ public class ChessAI : MonoBehaviour
 {
    public List<GameObject> pieces;
    public List<GameObject> capturedPieces;
-   public int maxPly = 4;
+   public List<Move> bestMoves;
+   public List<Move> undoSimulation;
+   
+   public int maxPly = 1;
    public int ply;
    public GameManager manager;
    public string name;
@@ -36,8 +39,8 @@ public class ChessAI : MonoBehaviour
    void Start()
    {
    	
-
-Minimax(manager.board, maxPly, false);
+    
+    GetBestMove();
    }
 
 
@@ -57,6 +60,7 @@ public ChessAI(string name, bool positiveZMovement)
        this.name = name;
        pieces = new List<GameObject>();
        capturedPieces = new List<GameObject>();
+       List<Move> undoSimulation = new List<Move>();
 
 
        if (positiveZMovement == true)
@@ -82,25 +86,33 @@ public ChessAI(string name, bool positiveZMovement)
 if (depth == 0) {       return EvaluateBoard(board);}   //base case
 	List<Move> legalMoves = new List<Move>();
     Debug.Log("elo1");
-legalMoves = LegalMoves();
+    legalMoves = LegalMoves();
+    Debug.Log(legalMoves.Count);
        if (maximizingPlayer)
        {
-           float bestScore = float.PositiveInfinity;
+           float bestScore = float.NegativeInfinity;
            foreach (Move m in legalMoves)
 	     {
 		   manager.Move(m.piece, m.position); //simulate move
-		   Board newBoard = new Board();
-               float score = Minimax(manager.board, depth-1, false);
+           bestMoves.Add(m);
+
+		   
+            float score = Minimax(manager.board, depth-1, false);
 		   if(bestScore > score)
 		   {
 		   	bestScore = score;
-   }
-	     }
+            }
+            else
+            {
+                bestMoves.Remove(m);
+            }
+            
+	    }
            return bestScore;
        }
        else
- {
-           float bestScore = float.NegativeInfinity;
+        {
+           float bestScore = float.PositiveInfinity;
 	     //ArrayList<move> legalMoves = LegalMoves();
            foreach (Move m in legalMoves)
 	     {
@@ -110,12 +122,15 @@ legalMoves = LegalMoves();
 		   if(bestScore < score)
 		   {
 		   	bestScore = score;
-   }
+            }
+        
 	     }
-           return bestScore;
+          return bestScore; 
 
 
        }
+        
+       
    }
 
 
@@ -128,11 +143,20 @@ legalMoves = LegalMoves();
 	foreach (GameObject piece in manager.pieces)
     {
             
-            Debug.Log("elo3");
-            if(piece == null)
+            Debug.Log("getting legal moves");
+            if(manager.GridForPiece(piece).Equals(null) || piece.Equals(null))
             {
                 continue;
             }
+            Move undo = new Move(piece, manager.GridForPiece(piece));
+            Debug.Log("got to og position");
+            
+            if(undoSimulation!=null)
+            {
+                undoSimulation.Add(undo);
+            }
+            Debug.Log("added it to undo");
+
             List<Vector2Int> positions = new List<Vector2Int>(); 
             positions = manager.MovesForPiece(piece);
             Debug.Log(positions.Count);
@@ -141,7 +165,10 @@ legalMoves = LegalMoves();
                 Debug.Log("elo4");
                 Move move = new Move(piece, pos);
                 Debug.Log("elo5");
-                legalMoves.Add(move);
+                if(legalMoves!=null)
+                {
+                    legalMoves.Add(move);
+                }
                 Debug.Log("elo6");
 
 
@@ -223,6 +250,23 @@ default:
 	
 }
 }
+
+Move GetBestMove()
+{
+Debug.Log("getting best move");
+Minimax(manager.board, 1, false);
+Debug.Log("minimax done");
+foreach(Move m in undoSimulation)
+{
+    manager.Move(m.piece, m.position);
+}
+Debug.Log("similated moves undone");
+List<Move> tempMoves = bestMoves;
+bestMoves.Clear();
+Debug.Log("bestMoves cleared");
+return tempMoves[0];
+}
+
 
 
 
