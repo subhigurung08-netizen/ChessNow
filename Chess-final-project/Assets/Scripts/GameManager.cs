@@ -141,7 +141,13 @@ public class GameManager : MonoBehaviour
 
     public List<Vector2Int> MovesForPiece(GameObject pieceObject)
     {
-        if(!pieceObject.Equals(null))
+        Debug.Log("getting moves for piece");
+        if(pieceObject == null)
+        {
+            return new List<Vector2Int>();
+        }
+
+        else
         {
             Piece piece = pieceObject.GetComponent<Piece>();
             Vector2Int gridPoint = GridForPiece(pieceObject);
@@ -154,8 +160,9 @@ public class GameManager : MonoBehaviour
             locations.RemoveAll(gp => FriendlyPieceAt(gp));
         
 
-        return locations;
+            return locations;
         }
+
         
     }
 
