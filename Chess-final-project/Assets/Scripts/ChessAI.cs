@@ -35,7 +35,9 @@ public class ChessAI : MonoBehaviour
 // Start is called before the first frame update
    void Start()
    {
-   	Minimax(manager.board, maxPly, false);
+   	
+
+Minimax(manager.board, maxPly, false);
    }
 
 
@@ -76,12 +78,11 @@ public ChessAI(string name, bool positiveZMovement)
 
    float Minimax(Board board, float depth, bool maximizingPlayer)
    {
-      Debug.Log("hello" + depth);
+     Debug.Log("HELLO" + depth);
 if (depth == 0) {       return EvaluateBoard(board);}   //base case
 	List<Move> legalMoves = new List<Move>();
     Debug.Log("elo1");
 legalMoves = LegalMoves();
-Debug.Log("elo2");
        if (maximizingPlayer)
        {
            float bestScore = float.PositiveInfinity;
@@ -120,25 +121,33 @@ Debug.Log("elo2");
 
    List<Move> LegalMoves()
    {
-    Debug.Log("elo1.1");
+    Debug.Log("elo2");
 	List<Move> legalMoves = new List<Move>();
-    Debug.Log("elo1.2");
+    Debug.Log(manager.pieces.GetLength(0));
+    
 	foreach (GameObject piece in manager.pieces)
-	{
-	
-List<Vector2Int> positions = new List<Vector2Int>(); 
-Debug.Log("elo1.3");
-positions = manager.MovesForPiece(piece);
-Debug.Log("elo1.4");
-foreach (Vector2Int pos in positions)
-{
-    Debug.Log("elo1.5");
-Move move = new Move(piece, pos);
-legalMoves.Add(move);
+    {
+            
+            Debug.Log("elo3");
+            if(piece == null)
+            {
+                continue;
+            }
+            List<Vector2Int> positions = new List<Vector2Int>(); 
+            positions = manager.MovesForPiece(piece);
+            Debug.Log(positions.Count);
+            foreach (Vector2Int pos in positions)
+            {
+                Debug.Log("elo4");
+                Move move = new Move(piece, pos);
+                Debug.Log("elo5");
+                legalMoves.Add(move);
+                Debug.Log("elo6");
 
 
-}
-}
+            }
+    }
+Debug.Log("elo7");
 return legalMoves;
    }
 
@@ -219,6 +228,9 @@ default:
 
 
 }
+
+
+
 
 
 

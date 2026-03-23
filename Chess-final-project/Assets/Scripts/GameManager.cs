@@ -112,6 +112,8 @@ public class GameManager : MonoBehaviour
         {
             AddPieceAI(blackPawn, black, i, 6);
         }
+
+        Debug.Log("Initial SetUp Done");
     }
 
     public void AddPiece(GameObject prefab, Player player, int col, int row)
@@ -154,6 +156,7 @@ public class GameManager : MonoBehaviour
 
     public void Move(GameObject piece, Vector2Int gridPoint)
     {
+        Debug.Log("sup MOVING");
         Piece pieceComponent = piece.GetComponent<Piece>();
         if (pieceComponent.type == PieceType.Pawn && !HasPawnMoved(piece))
         {
