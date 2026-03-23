@@ -83,7 +83,11 @@ public ChessAI(string name, bool positiveZMovement)
    float Minimax(Board board, float depth, bool maximizingPlayer)
    {
      Debug.Log("HELLO" + depth);
-if (depth == 0) {       return EvaluateBoard(board);}   //base case
+        if (depth == 0) 
+        {    
+            Debug.Log("going to evaluate board");
+            return EvaluateBoard(board);
+        }   //base case
 	List<Move> legalMoves = new List<Move>();
     Debug.Log("elo1");
     legalMoves = LegalMoves();
@@ -190,7 +194,7 @@ return legalMoves;
        foreach(GameObject piece in manager.pieces)
        {
            int value = GetPieceValue(piece);
-
+            Debug.Log("got piece value");
 
            if(manager.isPlayer)
            {
@@ -211,6 +215,11 @@ return legalMoves;
 
 int GetPieceValue(GameObject piece)
 {
+    Debug.Log("getting piece value");
+    if(piece == null)
+    {
+        return 0;
+    }
 	Piece pieceComponent = piece.GetComponent<Piece>();
 switch(pieceComponent.type)
 {

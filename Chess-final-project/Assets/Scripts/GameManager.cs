@@ -174,8 +174,13 @@ public class GameManager : MonoBehaviour
         {
             movedPawns.Add(piece);
         }
-
+        Debug.Log("going to get Grid for piece");
         Vector2Int startGridPoint = GridForPiece(piece);
+        Debug.Log("x:" + startGridPoint.x + " & z: " + startGridPoint.y);
+        if(startGridPoint.x>7 || startGridPoint.x<0 || startGridPoint.y>7 || startGridPoint.y < 0)
+        {
+            return;
+        }
         pieces[startGridPoint.x, startGridPoint.y] = null;
         pieces[gridPoint.x, gridPoint.y] = piece;
         board.MovePiece(piece, gridPoint);
@@ -262,6 +267,7 @@ public class GameManager : MonoBehaviour
             {
                 if (pieces[i, j] == piece)
                 {
+                    Debug.Log(" returning " + i + ", " + j);
                     return new Vector2Int(i, j);
                 }
             }
