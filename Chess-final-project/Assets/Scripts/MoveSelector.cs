@@ -88,17 +88,18 @@ public class MoveSelector : MonoBehaviour
                     // Reference Point 3: capture enemy piece here later
                     ExitState();
                 }
+
             }
             else
             {
                 tileHighlight.SetActive(false);
+                gm.black.BestMove();
+                ExitState();
+            
             }
         }
 
-        else
-        {
-            if(gm.black.GetBestMove())
-        }
+       
     }
 
     private void CancelMove()

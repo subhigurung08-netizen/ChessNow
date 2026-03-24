@@ -263,7 +263,7 @@ default:
 }
 }
 
-Move GetBestMove()
+public void BestMove()
 {
     Debug.Log("getting best move");
     if(bestMoves==null)
@@ -275,23 +275,37 @@ Move GetBestMove()
     Debug.Log("minimax done");
     if(undoSimulation!= null)
     {
-foreach(Move m in undoSimulation)
-{
-    if(m.piece == null || m.position == null)
+    foreach(Move m in undoSimulation)
     {
-        continue;
+        if(m.piece == null || m.position == null)
+        {
+            continue;
+        }
+        manager.Move(m.piece, m.position);
+        }
     }
-    manager.Move(m.piece, m.position);
-}
-}
-Debug.Log("similated moves undone");
+    Debug.Log("similated moves undone");
 
     List<Move> tempMoves = bestMoves;
     bestMoves.Clear();
     Debug.Log("bestMoves cleared");
     
-manager.Move(tempMoves[0].piece, tempMoves[0].position);
-return tempMoves[0];
+    
+    // if (!moveLocations.Contains(tempMoves[0].position))
+    // {
+    //     return;
+    //    }
+
+        if (manager.PieceAtGrid(tempMoves[0].position) == null)
+                    {
+                        manager.Move(tempMoves[0].piece, tempMoves[0].position);
+                    }
+                    else
+                    {
+                        manager.CapturePieceAt(tempMoves[0].position);
+                        manager.Move(tempMoves[0].piece, tempMoves[0].position);
+                    }
+    // return tempMoves[0];
 
     
 }

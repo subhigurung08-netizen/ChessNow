@@ -309,11 +309,13 @@ public class GameManager : MonoBehaviour
         // var otherPlayer = tempPlayer;
         if(isPlayer)
         {
+            Debug.Log("player's turn to ai's turn");
             isPlayer = false;
         
         }
         else
         {
+            Debug.Log("ai's turn to player's turn");
             isPlayer = true;
         }
     }
