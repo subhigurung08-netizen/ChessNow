@@ -307,6 +307,11 @@ public class GameManager : MonoBehaviour
     {
         return isPlayer;
     }
+
+    public Board getBoard()
+    {
+        return board;
+    }
     
     public void NextPlayer()
     {

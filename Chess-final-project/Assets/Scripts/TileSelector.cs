@@ -73,6 +73,7 @@ public class TileSelector : MonoBehaviour
                 }
             }
         }
+        
         else
         {
             tileHighlight.SetActive(false);
@@ -88,7 +89,7 @@ public class TileSelector : MonoBehaviour
 
     private void ExitState(GameObject movingPiece)
     {
-        Debug.Log("hi5");
+        Debug.Log("exitState tile");
         this.enabled = false;
         Debug.Log("hi6");
         tileHighlight.SetActive(false);

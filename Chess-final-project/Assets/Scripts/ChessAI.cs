@@ -14,7 +14,7 @@ public class ChessAI : MonoBehaviour
    
    public int maxPly = 1;
    public int ply;
-   public GameManager manager;
+//    public GameManager manager;
    public string name;
    public int forward;
 
@@ -84,7 +84,7 @@ public ChessAI(string name, bool positiveZMovement)
 
    float Minimax(Board board, float depth, bool maximizingPlayer)
    {
-     Debug.Log("HELLO" + depth);
+     Debug.Log("minimax" + depth);
         if (depth == 0) 
         {    
             Debug.Log("going to evaluate board");
@@ -99,11 +99,11 @@ public ChessAI(string name, bool positiveZMovement)
            float bestScore = float.NegativeInfinity;
            foreach (Move m in legalMoves)
 	     {
-		   manager.Move(m.piece, m.position); //simulate move
+		   GameManager.instance.Move(m.piece, m.position); //simulate move
            bestMoves.Add(m);
 
 		   
-            float score = Minimax(manager.board, depth-1, false);
+            float score = Minimax(GameManager.instance.board, depth-1, false);
 		   if(bestScore > score)
 		   {
 		   	bestScore = score;
@@ -122,9 +122,9 @@ public ChessAI(string name, bool positiveZMovement)
 	     //ArrayList<move> legalMoves = LegalMoves();
            foreach (Move m in legalMoves)
 	     {
-               manager.Move(m.piece, m.position); //simulate move
+               GameManager.instance.Move(m.piece, m.position); //simulate move
 		   
-               float score = Minimax(manager.board, depth-1, true);
+               float score = Minimax(GameManager.instance.getBoard(), depth-1, true);
 		   if(bestScore < score)
 		   {
 		   	bestScore = score;
@@ -144,17 +144,17 @@ public ChessAI(string name, bool positiveZMovement)
    {
     Debug.Log("elo2");
 	List<Move> legalMoves = new List<Move>();
-    Debug.Log(manager.pieces.GetLength(0));
+    Debug.Log(GameManager.instance.pieces.GetLength(0));
     
-	foreach (GameObject piece in manager.pieces)
+	foreach (GameObject piece in GameManager.instance.pieces)
     {
             
             Debug.Log("getting legal moves");
-            // if(piece.Equals(null) || manager.GridForPiece(piece).Equals(null))
+            // if(piece.Equals(null) || GameManager.instance.GridForPiece(piece).Equals(null))
             // {
             //     continue;
             // }
-            Move undo = new Move(piece, manager.GridForPiece(piece));
+            Move undo = new Move(piece, GameManager.instance.GridForPiece(piece));
             Debug.Log("got to og position");
             
             if(undoSimulation!=null)
@@ -164,7 +164,7 @@ public ChessAI(string name, bool positiveZMovement)
             Debug.Log("added it to undo");
 
             List<Vector2Int> positions = new List<Vector2Int>(); 
-            positions = manager.MovesForPiece(piece);
+            positions = GameManager.instance.MovesForPiece(piece);
             Debug.Log(positions.Count);
             foreach (Vector2Int pos in positions)
             {
@@ -193,12 +193,12 @@ return legalMoves;
        int score = 0;
 
 
-       foreach(GameObject piece in manager.pieces)
+       foreach(GameObject piece in GameManager.instance.pieces)
        {
            int value = GetPieceValue(piece);
             Debug.Log("got piece value");
 
-           if(manager.isPlayer)
+           if(GameManager.instance.getIsPlayer())
            {
               score -= value;
            }
@@ -273,7 +273,7 @@ public void BestMove()
         return;
     }
 
-    Minimax(manager.board, 1, false);
+    Minimax(GameManager.instance.board, 1, false);
     Debug.Log("minimax done");
     if(undoSimulation!= null)
     {
@@ -283,7 +283,7 @@ public void BestMove()
         {
             continue;
         }
-        manager.Move(m.piece, m.position);
+        GameManager.instance.Move(m.piece, m.position);
         }
     }
     Debug.Log("similated moves undone");
@@ -298,15 +298,18 @@ public void BestMove()
     //     return;
     //    }
 
-        if (manager.PieceAtGrid(tempMoves[0].position) == null)
-                    {
-                        manager.Move(tempMoves[0].piece, tempMoves[0].position);
-                    }
-                    else
-                    {
-                        manager.CapturePieceAt(tempMoves[0].position);
-                        manager.Move(tempMoves[0].piece, tempMoves[0].position);
-                    }
+        if (GameManager.instance.PieceAtGrid(tempMoves[0].position) == null)
+        {
+            Debug.Log("going to do best move ai");
+            GameManager.instance.Move(tempMoves[0].piece, tempMoves[0].position);
+
+        }   
+        
+        else
+        {
+            GameManager.instance.CapturePieceAt(tempMoves[0].position);
+            GameManager.instance.Move(tempMoves[0].piece, tempMoves[0].position);
+        }
     // return tempMoves[0];
 
     

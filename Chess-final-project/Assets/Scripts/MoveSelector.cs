@@ -93,7 +93,9 @@ public class MoveSelector : MonoBehaviour
             else
             {
                 tileHighlight.SetActive(false);
-                GameManager.instance.BestMove();
+                Debug.Log("going to call best move");
+                ChessAI.inst.BestMove();
+                Debug.Log("did best move, and going to switch to player");
                 ExitState();
             
             }
