@@ -40,7 +40,7 @@ public class ChessAI : MonoBehaviour
    {
    	
     
-    GetBestMove();
+    //GetBestMove();
    }
 
 
@@ -263,7 +263,7 @@ default:
 }
 }
 
-void BestMove()
+Move GetBestMove()
 {
     Debug.Log("getting best move");
     if(bestMoves==null)
@@ -291,6 +291,7 @@ Debug.Log("similated moves undone");
     Debug.Log("bestMoves cleared");
     
 manager.Move(tempMoves[0].piece, tempMoves[0].position);
+return tempMoves[0];
 
     
 }

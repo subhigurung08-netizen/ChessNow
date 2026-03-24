@@ -56,37 +56,48 @@ public class MoveSelector : MonoBehaviour
         Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
 
         RaycastHit hit;
-        if (Physics.Raycast(ray, out hit))
+        
+        GameManager gm = new GameManager();
+        if(gm.isPlayer)
         {
-            Vector3 point = hit.point;
-            Vector2Int gridPoint = Geometry.GridFromPoint(point);
 
-            tileHighlight.SetActive(true);
-            tileHighlight.transform.position = Geometry.PointFromGrid(gridPoint);
-            if (Input.GetMouseButtonDown(0))
+            if (Physics.Raycast(ray, out hit))
             {
-                // Reference Point 2: check for valid move location
-                if (!moveLocations.Contains(gridPoint))
-                {
-                    return;
-                }
+                Vector3 point = hit.point;
+                Vector2Int gridPoint = Geometry.GridFromPoint(point);
 
-                if (GameManager.instance.PieceAtGrid(gridPoint) == null)
+                tileHighlight.SetActive(true);
+                tileHighlight.transform.position = Geometry.PointFromGrid(gridPoint);
+                if (Input.GetMouseButtonDown(0))
                 {
-                    GameManager.instance.Move(movingPiece, gridPoint);
+                    // Reference Point 2: check for valid move location
+                    if (!moveLocations.Contains(gridPoint))
+                    {
+                        return;
+                    }
+
+                    if (GameManager.instance.PieceAtGrid(gridPoint) == null)
+                    {
+                        GameManager.instance.Move(movingPiece, gridPoint);
+                    }
+                    else
+                    {
+                        GameManager.instance.CapturePieceAt(gridPoint);
+                        GameManager.instance.Move(movingPiece, gridPoint);
+                    }
+                    // Reference Point 3: capture enemy piece here later
+                    ExitState();
                 }
-                else
-                {
-                    GameManager.instance.CapturePieceAt(gridPoint);
-                    GameManager.instance.Move(movingPiece, gridPoint);
-                }
-                // Reference Point 3: capture enemy piece here later
-                ExitState();
+            }
+            else
+            {
+                tileHighlight.SetActive(false);
             }
         }
+
         else
         {
-            tileHighlight.SetActive(false);
+            if(gm.black.GetBestMove())
         }
     }
 
