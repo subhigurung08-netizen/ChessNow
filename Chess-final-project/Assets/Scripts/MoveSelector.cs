@@ -57,8 +57,8 @@ public class MoveSelector : MonoBehaviour
 
         RaycastHit hit;
         
-        GameManager gm = new GameManager();
-        if(gm.isPlayer)
+        // GameManager gm = gameObject.GetComponent<GameManager>();
+        if(GameManager.instance.getIsPlayer())
         {
 
             if (Physics.Raycast(ray, out hit))
@@ -93,7 +93,7 @@ public class MoveSelector : MonoBehaviour
             else
             {
                 tileHighlight.SetActive(false);
-                gm.black.BestMove();
+                GameManager.instance.BestMove();
                 ExitState();
             
             }

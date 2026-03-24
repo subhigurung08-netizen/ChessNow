@@ -5,6 +5,8 @@ using UnityEngine;
 
 public class ChessAI : MonoBehaviour
 {
+   public static ChessAI inst;
+   
    public List<GameObject> pieces;
    public List<GameObject> capturedPieces;
    public List<Move> bestMoves;
