@@ -302,6 +302,7 @@ public void BestMove()
         {
             Debug.Log("going to do best move ai");
             GameManager.instance.Move(tempMoves[0].piece, tempMoves[0].position);
+            
 
         }   
         

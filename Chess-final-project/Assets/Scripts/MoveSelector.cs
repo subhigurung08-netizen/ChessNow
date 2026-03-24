@@ -58,9 +58,10 @@ public class MoveSelector : MonoBehaviour
         RaycastHit hit;
         
         // GameManager gm = gameObject.GetComponent<GameManager>();
+        Debug.Log("update move selector: isPlayer is " + GameManager.instance.getIsPlayer());
         if(GameManager.instance.getIsPlayer())
         {
-
+            Debug.Log("player's turn moveselector");
             if (Physics.Raycast(ray, out hit))
             {
                 Vector3 point = hit.point;
@@ -90,16 +91,22 @@ public class MoveSelector : MonoBehaviour
                 }
 
             }
-            else
-            {
-                tileHighlight.SetActive(false);
+        }
+        else
+        {
+                
+                // tileHighlight.SetActive(false);
                 Debug.Log("going to call best move");
-                ChessAI.inst.BestMove();
+                if(GameManager.instance != null)
+                {
+                    GameManager.instance.getColorAI().BestMove();
+                }
+                
                 Debug.Log("did best move, and going to switch to player");
                 ExitState();
             
-            }
         }
+        
 
        
     }
@@ -120,6 +127,7 @@ public class MoveSelector : MonoBehaviour
 
     public void EnterState(GameObject piece)
     {
+        Debug.Log("moving piece move selector");
         movingPiece = piece;
         this.enabled = true;
         moveLocations = GameManager.instance.MovesForPiece(movingPiece);
@@ -148,12 +156,13 @@ public class MoveSelector : MonoBehaviour
     private void ExitState()
     {
         this.enabled = false;
-        TileSelector selector = GetComponent<TileSelector>();
+        MoveSelector selector = GetComponent<MoveSelector>();
         tileHighlight.SetActive(false);
         GameManager.instance.DeselectPiece(movingPiece);
         movingPiece = null;
         GameManager.instance.NextPlayer();
-        selector.EnterState();
+        Debug.Log("switched players");
+        selector.Update();
         foreach (GameObject highlight in locationHighlights)
         {
             Destroy(highlight);

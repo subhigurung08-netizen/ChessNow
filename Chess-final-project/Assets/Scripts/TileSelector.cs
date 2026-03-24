@@ -51,6 +51,8 @@ public class TileSelector : MonoBehaviour
         Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
 
         RaycastHit hit;
+        if(GameManager.instance.getIsPlayer())
+        {
         if (Physics.Raycast(ray, out hit))
         {
             Vector3 point = hit.point;
@@ -77,6 +79,7 @@ public class TileSelector : MonoBehaviour
         else
         {
             tileHighlight.SetActive(false);
+        }
         }
     }
 

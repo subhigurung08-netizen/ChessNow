@@ -312,6 +312,11 @@ public class GameManager : MonoBehaviour
     {
         return board;
     }
+
+    public ChessAI getColorAI()
+    {
+        return black;
+    }
     
     public void NextPlayer()
     {
@@ -322,12 +327,15 @@ public class GameManager : MonoBehaviour
         {
             Debug.Log("player's turn to ai's turn");
             isPlayer = false;
+            Debug.Log("isPlayer is " + isPlayer);
         
         }
         else
         {
             Debug.Log("ai's turn to player's turn");
             isPlayer = true;
+            Debug.Log("isPlayer is " + isPlayer);
+
         }
     }
 }
