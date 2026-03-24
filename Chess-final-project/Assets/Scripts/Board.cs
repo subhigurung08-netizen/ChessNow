@@ -62,7 +62,14 @@ public class Board : MonoBehaviour
 
     public void DeselectPiece(GameObject piece)
     {
+        
+        if(piece != null)
+        {
         MeshRenderer renderers = piece.GetComponentInChildren<MeshRenderer>();
-        renderers.material = defaultMaterial;
+        if(renderers != null)
+        {
+            renderers.material = defaultMaterial;
+        }
+        }
     }
 }

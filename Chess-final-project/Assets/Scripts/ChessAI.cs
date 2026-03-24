@@ -267,16 +267,18 @@ default:
 
 public void BestMove()
 {
+    Minimax(GameManager.instance.board, 1, false);
     Debug.Log("getting best move");
     if(bestMoves==null)
     {
         return;
     }
 
-    Minimax(GameManager.instance.board, 1, false);
+    
     Debug.Log("minimax done");
     if(undoSimulation!= null)
     {
+        Debug.Log("undoing simulation");
     foreach(Move m in undoSimulation)
     {
         if(m.piece == null || m.position == null)
