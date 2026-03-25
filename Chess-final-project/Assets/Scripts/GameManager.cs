@@ -170,6 +170,8 @@ public class GameManager : MonoBehaviour
     public void Move(GameObject piece, Vector2Int gridPoint)
     {
         Debug.Log("sup MOVING");
+        if(piece != null)
+        {
         Piece pieceComponent = piece.GetComponent<Piece>();
         if (pieceComponent.type == PieceType.Pawn && !HasPawnMoved(piece))
         {
@@ -185,6 +187,7 @@ public class GameManager : MonoBehaviour
         pieces[startGridPoint.x, startGridPoint.y] = null;
         pieces[gridPoint.x, gridPoint.y] = piece;
         board.MovePiece(piece, gridPoint);
+        }
     }
 
     public void PawnMoved(GameObject pawn)

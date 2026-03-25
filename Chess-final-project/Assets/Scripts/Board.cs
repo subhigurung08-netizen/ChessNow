@@ -66,10 +66,10 @@ public class Board : MonoBehaviour
         if(piece != null)
         {
         MeshRenderer renderers = piece.GetComponentInChildren<MeshRenderer>();
-        if(renderers != null)
-        {
-            renderers.material = defaultMaterial;
-        }
+            if(renderers != null)
+            {
+                renderers.material = defaultMaterial;
+            }
         }
     }
 }
