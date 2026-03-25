@@ -78,11 +78,7 @@ public ChessAI(string name, bool positiveZMovement)
 
 
 
-
-
-
-
-   float Minimax(Board board, float depth, bool maximizingPlayer)
+   float Minimax(Board board, float depth, float alpha, float beta, bool maximizingPlayer)
    {
      Debug.Log("minimax" + depth);
         if (depth == 0) 
@@ -103,14 +99,24 @@ public ChessAI(string name, bool positiveZMovement)
            bestMoves.Add(m);
 
 		   
-            float score = Minimax(GameManager.instance.board, depth-1, false);
-		   if(bestScore > score)
+            float score = Minimax(GameManager.instance.board, depth-1, alpha, beta, false);
+		   if(score > bestScore)
 		   {
-		   	bestScore = score;
+		   	    bestScore = score;
             }
             else
             {
                 bestMoves.Remove(m);
+            }
+
+            if(alpha>bestScore)
+            {
+                alpha = bestScore;
+            }
+
+            if(alpha<beta)
+            {
+                break;
             }
             
 	    }
@@ -124,14 +130,25 @@ public ChessAI(string name, bool positiveZMovement)
 	     {
                GameManager.instance.Move(m.piece, m.position); //simulate move
 		   
-               float score = Minimax(GameManager.instance.getBoard(), depth-1, true);
-		   if(bestScore < score)
+               float score = Minimax(GameManager.instance.getBoard(), depth-1, alpha, beta, true);
+
+            if(bestScore< score)
+            {
+                bestScore = score;
+            }
+
+            if(bestScore < beta)
+            {
+                beta = bestScore;
+            }
+
+		   if(beta>alpha)
 		   {
-		   	bestScore = score;
+		   	break;
             }
         
 	     }
-          return bestScore; 
+          return bestScore;
 
 
        }
@@ -186,6 +203,7 @@ public ChessAI(string name, bool positiveZMovement)
 Debug.Log("elo7 finished legalMoves");
 return legalMoves;
    }
+
 
 
    float EvaluateBoard(Board board)
@@ -267,7 +285,7 @@ default:
 
 public void BestMove()
 {
-    Minimax(GameManager.instance.board, 1, false);
+    Minimax(GameManager.instance.board, 1, float.NegativeInfinity, float.PositiveInfinity, false);
     Debug.Log("getting best move");
     if(bestMoves==null)
     {
