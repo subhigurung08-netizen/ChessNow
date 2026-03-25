@@ -379,6 +379,7 @@
 "Assets/Scripts/Pieces/Queen.cs"
 "Assets/Scripts/Pieces/Rook.cs"
 "Assets/Scripts/Player.cs"
+"Assets/Scripts/SwitchScenes.cs"
 "Assets/Scripts/TileSelector.cs"
 -langversion:9.0
 /deterministic

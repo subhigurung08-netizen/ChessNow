@@ -42,7 +42,7 @@ public class Pawn : Piece
             return new List<Vector2Int>();
         }
         
-        GameManager gM = new GameManager();
+        
         
         
         int forwardDirection = 0;
@@ -50,10 +50,11 @@ public class Pawn : Piece
         
         
 
-        if(!gM.isPlayer)
+        if(GameManager.instance.getIsPlayer())
         {
             
-            forwardDirection = GameManager.instance.white.forward;
+            // forwardDirection = GameManager.instance.white.forward;
+            forwardDirection = 1;
             
             
         }
@@ -61,7 +62,8 @@ public class Pawn : Piece
         else
         {
             
-            forwardDirection = GameManager.instance.black.forward;
+            // forwardDirection = GameManager.instance.black.forward;
+            forwardDirection = -1;
             
             
         }
