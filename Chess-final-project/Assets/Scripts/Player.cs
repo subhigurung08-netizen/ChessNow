@@ -44,14 +44,15 @@ public class Player: MonoBehaviour
         this.name = name;
         pieces = new List<GameObject>();
         capturedPieces = new List<GameObject>();
+        this.forward = 1;
 
-        if (positiveZMovement == true)
-        {
-            this.forward = 1;
-        }
-        else
-        {
-            this.forward = -1;
-        }
+        // if (positiveZMovement == true)
+        // {
+        //     this.forward = 1;
+        // }
+        // else
+        // {
+        //     this.forward = -1;
+        // }
     }
 }
