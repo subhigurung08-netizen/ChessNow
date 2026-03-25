@@ -725,7 +725,7 @@ default:
 
 public void BestMove()
 {
-    Minimax(GameManager.instance.board, 2, float.NegativeInfinity, float.PositiveInfinity, false);
+    Minimax(GameManager.instance.board, maxPly, float.NegativeInfinity, float.PositiveInfinity, false);
     Debug.Log("getting best move" + " pawn forward value:" + forward);
     if(bestMoves==null)
     {
