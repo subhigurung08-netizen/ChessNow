@@ -520,27 +520,30 @@ public ChessAI(string name, bool positiveZMovement)
        if (maximizingPlayer)
        {
            float bestScore = float.NegativeInfinity;
+            if(bestMoves!=null)
+           {
+                bestMoves.Add(legalMoves[0]);
+           }
+           int count = 0;
            foreach (Move m in legalMoves)
 	     {
-		   if(m.piece == null || m.position == null)
+		   
+           if(m.piece == null || m.position == null || count ==0)
            {
             continue;
            }
            GameManager.instance.Move(m.piece, m.position); //simulate move
-           if(bestMoves!=null)
-           {
-                bestMoves.Add(m);
-           }
+           
 
-		   
+		   Debug.Log("calling minimax");
             float score = Minimax(GameManager.instance.board, depth-1, alpha, beta, false);
 		   if(score > bestScore)
 		   {
-		   	    bestScore = score;
-            }
-            else
-            {
-                bestMoves.Remove(m);
+                Debug.Log("score: " + score + ", best score: " + bestScore);
+		   	    bestMoves.RemoveAt(bestMoves.Count - 1);
+                bestMoves.Add(m);
+                Debug.Log("Replacing best move for count " + count);
+                bestScore = score;
             }
 
             if(alpha>bestScore)
@@ -552,6 +555,7 @@ public ChessAI(string name, bool positiveZMovement)
             {
                 break;
             }
+            count++;
             
 	    }
            return bestScore;
@@ -560,6 +564,7 @@ public ChessAI(string name, bool positiveZMovement)
         {
            float bestScore = float.PositiveInfinity;
 	     //ArrayList<move> legalMoves = LegalMoves();
+
            foreach (Move m in legalMoves)
 	     {
                GameManager.instance.Move(m.piece, m.position); //simulate move
@@ -768,8 +773,9 @@ public void BestMove()
         
         else
         {
-            GameManager.instance.CapturePieceAt(tempMoves[0].position);
-            GameManager.instance.Move(tempMoves[0].piece, tempMoves[0].position);
+            Debug.Log("capturing piece");
+            GameManager.instance.CapturePieceAt(tempMoves[tempMoves.Count -1].position);
+            GameManager.instance.Move(tempMoves[tempMoves.Count -1].piece, tempMoves[tempMoves.Count -1].position);
         }
     // return tempMoves[0];
 

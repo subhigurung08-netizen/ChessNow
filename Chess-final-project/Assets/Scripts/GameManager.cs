@@ -30,6 +30,7 @@
 
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class GameManager : MonoBehaviour
 {
@@ -209,11 +210,13 @@ public class GameManager : MonoBehaviour
             {
 
                 Debug.Log("white wins!");
+                SceneManager.LoadScene("Start Scene");
             }
 
             else
             {
                 Debug.Log("black wins!");
+                SceneManager.LoadScene("Start Scene");
             }
             Destroy(board.GetComponent<TileSelector>());
             Destroy(board.GetComponent<MoveSelector>());
