@@ -63,6 +63,7 @@ public ChessAI(string name, bool positiveZMovement)
        pieces = new List<GameObject>();
        capturedPieces = new List<GameObject>();
        List<Move> undoSimulation = new List<Move>();
+       bestMoves = new List<Move>();
         this.forward = -1;
 
     //    if (positiveZMovement == true)
