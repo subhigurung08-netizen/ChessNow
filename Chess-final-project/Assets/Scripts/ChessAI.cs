@@ -12,7 +12,7 @@ public class ChessAI : MonoBehaviour
    public List<Move> bestMoves;
    public List<Move> undoSimulation;
    
-   public int maxPly = 1;
+   public int maxPly = 2;
    public int ply;
 //    public GameManager manager;
    public string name;
@@ -98,7 +98,7 @@ public ChessAI(string name, bool positiveZMovement)
            float bestScore = float.NegativeInfinity;
         //     if(bestMoves!=null)
         //    {
-
+//but then i tried to make max ply =2
             bestMoves.Add(legalMoves[0]);
         //    }
            int count = 0;
@@ -244,13 +244,31 @@ return legalMoves;
 
            if(GameManager.instance.getIsPlayer())
            {
-              score -= value;
+              if(GameManager.instance.DoesPieceBelongToCurrentPlayer(piece, true))
+              {
+                score += value;
+              }
+
+              else
+              {
+                score-= value;
+              }
            }
 
 
            else
            {
-               score += value;
+               if(GameManager.instance.DoesPieceBelongToCurrentPlayer(piece, false))
+              {
+                score+= value;
+              }
+
+              else
+              {
+                score-= value;
+              }
+               
+               
            }
        }
        return score;
