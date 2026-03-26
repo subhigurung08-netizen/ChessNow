@@ -223,10 +223,12 @@ public class GameManager : MonoBehaviour
         }
         if(isPlayer)
         {
+            Debug.Log("player captured a piece");
             white.capturedPieces.Add(pieceToCapture);
         }
         else
         {
+            Debug.Log("ai captured a piece");
             black.capturedPieces.Add(pieceToCapture);
         }
         pieces[gridPoint.x, gridPoint.y] = null;
@@ -262,6 +264,7 @@ public class GameManager : MonoBehaviour
         {
             return null;
         }
+        Debug.Log("piece at " + gridPoint.x + ", " + gridPoint.y);
         return pieces[gridPoint.x, gridPoint.y];
     }
 
