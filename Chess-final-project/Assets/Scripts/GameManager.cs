@@ -245,9 +245,9 @@ public class GameManager : MonoBehaviour
         board.DeselectPiece(piece);
     }
 
-    public bool DoesPieceBelongToCurrentPlayer(GameObject piece)
+    public bool DoesPieceBelongToCurrentPlayer(GameObject piece, bool isP)
     {
-        if(isPlayer)
+        if(isP)
         {
             return white.pieces.Contains(piece);
         }

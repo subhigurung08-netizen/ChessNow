@@ -78,7 +78,7 @@ public ChessAI(string name, bool positiveZMovement)
 
 
 
-   float Minimax(Board board, float depth, float alpha, float beta, bool maximizingPlayer)
+   float Minimax(Board board, float depth, float alpha, float beta, bool maximizingAI)
    {
      Debug.Log("minimax" + depth);
         if (depth == 0) 
@@ -86,12 +86,14 @@ public ChessAI(string name, bool positiveZMovement)
             Debug.Log("going to evaluate board");
             return EvaluateBoard(board);
         }   //base case
-	List<Move> legalMoves = new List<Move>();
+	List<Move> legalMoves = LegalMoves(maximizingAI);
     Debug.Log("elo1");
-    legalMoves = LegalMoves();
-    Debug.Log("there are" + legalMoves.Count + " legal moves");
-       if (maximizingPlayer)
+    
+    
+       if (maximizingAI)
        {
+            // List<Move> legalMoves = LegalMoves(true);
+            Debug.Log("the ai has " + legalMoves.Count + " legal moves");
            float bestScore = float.NegativeInfinity;
         //     if(bestMoves!=null)
         //    {
@@ -101,7 +103,7 @@ public ChessAI(string name, bool positiveZMovement)
            int count = 0;
            foreach (Move m in legalMoves)
 	     {
-		   
+		   Vector2Int original = GameManager.instance.GridForPiece(m.piece);
            if(m.piece == null || m.position == null || count ==0)
            {
             continue;
@@ -131,16 +133,19 @@ public ChessAI(string name, bool positiveZMovement)
             }
             count++;
             
+            GameManager.instance.Move(m.piece, original); //unsimulate move
 	    }
            return bestScore;
        }
        else
         {
            float bestScore = float.PositiveInfinity;
-	     //ArrayList<move> legalMoves = LegalMoves();
+	    //  List<Move> legalMoves = LegalMoves(false);
+         Debug.Log("the player has " + legalMoves.Count + " legal moves");
 
            foreach (Move m in legalMoves)
 	     {
+                Vector2Int original = GameManager.instance.GridForPiece(m.piece);
                GameManager.instance.Move(m.piece, m.position); //simulate move
 		   
                float score = Minimax(GameManager.instance.getBoard(), depth-1, alpha, beta, true);
@@ -159,18 +164,18 @@ public ChessAI(string name, bool positiveZMovement)
 		   {
 		   	break;
             }
+            GameManager.instance.Move(m.piece, original); //unsimulate move
         
 	     }
           return bestScore;
 
 
        }
-        
-       
+         
    }
 
 
-   List<Move> LegalMoves()
+   List<Move> LegalMoves(bool isP)
    {
     Debug.Log("elo2");
 	List<Move> legalMoves = new List<Move>();
@@ -179,7 +184,7 @@ public ChessAI(string name, bool positiveZMovement)
 	foreach (GameObject piece in GameManager.instance.pieces)
     {
             
-            if(!GameManager.instance.DoesPieceBelongToCurrentPlayer(piece))
+            if(!GameManager.instance.DoesPieceBelongToCurrentPlayer(piece, isP))
             {
                 continue;
             }
@@ -189,14 +194,15 @@ public ChessAI(string name, bool positiveZMovement)
             // {
             //     continue;
             // }
-            Move undo = new Move(piece, GameManager.instance.GridForPiece(piece));
-            Debug.Log("got og position");
+            // Move undo = new Move(piece, GameManager.instance.GridForPiece(piece));
+            // Debug.Log("got og position");
             
-            if(undoSimulation!=null)
-            {
-                undoSimulation.Add(undo);
-                Debug.Log("added it to undo");
-            }
+            // if(undoSimulation!=null)
+            // {
+            //     Debug.Log("undoSimulation is not null");
+            //     undoSimulation.Add(undo);
+            //     Debug.Log("added it to undo");
+            // }
             
 
             List<Vector2Int> positions = new List<Vector2Int>(); 

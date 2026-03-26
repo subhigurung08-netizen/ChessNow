@@ -65,7 +65,7 @@ public class TileSelector : MonoBehaviour
             if (Input.GetMouseButtonDown(0))
             {
                 GameObject selectedPiece = GameManager.instance.PieceAtGrid(gridPoint);
-                if (GameManager.instance.DoesPieceBelongToCurrentPlayer(selectedPiece))
+                if (GameManager.instance.DoesPieceBelongToCurrentPlayer(selectedPiece, true))
                 {
                     GameManager.instance.SelectPiece(selectedPiece);
                     // Reference Point 1: add ExitState call here later
