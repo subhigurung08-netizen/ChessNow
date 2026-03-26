@@ -48,7 +48,8 @@ public class TileSelector : MonoBehaviour
 
     void Update ()
     {
-        
+        // if(!Camera.equals(null))
+        // {
         Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
 
         RaycastHit hit;
@@ -76,6 +77,7 @@ public class TileSelector : MonoBehaviour
         {
             tileHighlight.SetActive(false);
         }
+        // }
         // }
     }
 
