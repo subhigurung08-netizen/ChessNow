@@ -122,6 +122,54 @@ NavMeshSettings:
     debug:
       m_Flags: 0
   m_NavMeshData: {fileID: 0}
+--- !u!1 &85467179
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 85467181}
+  - component: {fileID: 85467180}
+  m_Layer: 0
+  m_Name: Player
+  m_TagString: Player
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!114 &85467180
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 85467179}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 79fb381de31fc4c0fa20244aedf0ad81, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  pieces: []
+  capturedPieces: []
+  name: white
+  forward: 1
+--- !u!4 &85467181
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 85467179}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 451.27637, y: 220.77614, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &460274025
 GameObject:
   m_ObjectHideFlags: 0
@@ -297,7 +345,7 @@ MonoBehaviour:
   blackRook: {fileID: 1218684493727980, guid: c13dffa2e41e349c78351ec06686dc75, type: 3}
   blackPawn: {fileID: 1795645163035938, guid: 455e0d5008a5e426a96c3987ea4f82b6, type: 3}
   white: {fileID: 0}
-  black: {fileID: 0}
+  black: {fileID: 1463427518}
   isPlayer: 0
 --- !u!4 &516697439
 Transform:
@@ -719,8 +767,8 @@ GameObject:
   - component: {fileID: 1463427519}
   - component: {fileID: 1463427518}
   m_Layer: 0
-  m_Name: ChessAI
-  m_TagString: Untagged
+  m_Name: ai
+  m_TagString: ai
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -739,9 +787,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   pieces: []
   capturedPieces: []
-  maxPly: 4
+  maxPly: 1
   ply: 0
-  name: 
+  name: Black
   forward: 0
 --- !u!4 &1463427519
 Transform:
@@ -795,4 +843,5 @@ SceneRoots:
   - {fileID: 892110089}
   - {fileID: 516697439}
   - {fileID: 1463427519}
+  - {fileID: 85467181}
   - {fileID: 460274027}

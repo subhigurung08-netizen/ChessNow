@@ -60,12 +60,14 @@ public class ChessAI : MonoBehaviour
     capturedPieces = new List<GameObject>();
     undoSimulation = new List<Move>();
     pieces = new List<GameObject>();
+    name = "black";
+    forward = -1;
 }
 
 
 
 
-public ChessAI(string name, bool positiveZMovement)
+public ChessAI(string name)
 {
        this.name = name;
     //    pieces = new List<GameObject>();

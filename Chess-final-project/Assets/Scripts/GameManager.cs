@@ -73,8 +73,12 @@ public class GameManager : MonoBehaviour
         pieces = new GameObject[8, 8];
         movedPawns = new List<GameObject>();
 
-        white = new Player("white", true);
-        black = new ChessAI("black", false);
+        GameObject player = new GameObject();
+        GameObject ai = new GameObject();
+
+        white = player.AddComponent<Player>();
+        black = ai.AddComponent<ChessAI>();
+        // black = new ChessAI("black");
 
         // currentPlayer = white;
         // otherPlayer = black;
@@ -100,18 +104,18 @@ public class GameManager : MonoBehaviour
             AddPiece(whitePawn, white, i, 1);
         }
 
-        AddPieceAI(blackRook, black, 0, 7);
-        AddPieceAI(blackKnight, black, 1, 7);
-        AddPieceAI(blackBishop, black, 2, 7);
-        AddPieceAI(blackQueen, black, 3, 7);
-        AddPieceAI(blackKing, black, 4, 7);
-        AddPieceAI(blackBishop, black, 5, 7);
-        AddPieceAI(blackKnight, black, 6, 7);
-        AddPieceAI(blackRook, black, 7, 7);
+        AddPieceAI(blackRook, 0, 7);
+        AddPieceAI(blackKnight, 1, 7);
+        AddPieceAI(blackBishop, 2, 7);
+        AddPieceAI(blackQueen, 3, 7);
+        AddPieceAI(blackKing, 4, 7);
+        AddPieceAI(blackBishop, 5, 7);
+        AddPieceAI(blackKnight, 6, 7);
+        AddPieceAI(blackRook, 7, 7);
 
         for (int i = 0; i < 8; i++)
         {
-            AddPieceAI(blackPawn, black, i, 6);
+            AddPieceAI(blackPawn, i, 6);
         }
 
         Debug.Log("Initial SetUp Done");
@@ -125,16 +129,23 @@ public class GameManager : MonoBehaviour
         pieces[col, row] = pieceObject;
     }
 
-    public void AddPieceAI(GameObject prefab, ChessAI ai, int col, int row)
+    public void AddPieceAI(GameObject prefab, int col, int row)
     {
-        if()
-        GameObject pieceObject = board.AddPiece(prefab, col, row);
-        if(pieces == null && pieceObject == null)
+        
+        if(black==null)
         {
+            Debug.Log("ai is null");
+        }
+        GameObject pieceObject = board.AddPiece(prefab, col, row);
+        if(pieceObject == null)
+        {
+            Debug.Log("pieceObject is null");
             return;
         }
+
         
-        ai.pieces.Add(pieceObject);
+        
+        black.pieces.Add(pieceObject);
         
         pieces[col, row] = pieceObject;
         
