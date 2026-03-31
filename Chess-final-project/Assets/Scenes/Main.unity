@@ -344,9 +344,11 @@ MonoBehaviour:
     type: 3}
   blackRook: {fileID: 1218684493727980, guid: c13dffa2e41e349c78351ec06686dc75, type: 3}
   blackPawn: {fileID: 1795645163035938, guid: 455e0d5008a5e426a96c3987ea4f82b6, type: 3}
-  white: {fileID: 0}
+  white: {fileID: 85467180}
   black: {fileID: 1463427518}
   isPlayer: 0
+  player: {fileID: 85467179}
+  ai: {fileID: 1463427517}
 --- !u!4 &516697439
 Transform:
   m_ObjectHideFlags: 0
@@ -787,7 +789,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   pieces: []
   capturedPieces: []
-  maxPly: 1
+  maxPly: 2
   ply: 0
   name: Black
   forward: 0

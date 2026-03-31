@@ -268,22 +268,22 @@ public class GameManager : MonoBehaviour
         board.DeselectPiece(piece);
     }
 
-    public bool DoesPieceBelongToCurrentPlayer(GameObject piece, bool isP)
+    public bool DoesPieceBelongToCurrentPlayer(GameObject piece, bool isAI)
     {
-        if(isP)
+        if(isAI)
         {
-            return white.pieces.Contains(piece);
+            return black.pieces.Contains(piece);
         }
 
         else
         {
-            return black.pieces.Contains(piece);
+            return white.pieces.Contains(piece);
         }
     }
 
     public GameObject PieceAtGrid(Vector2Int gridPoint)
     {
-        if (gridPoint.x > 7 || gridPoint.y > 7 || gridPoint.x < 0 || gridPoint.y < 0)
+        if (gridPoint.x > 7 || gridPoint.y > 7 || gridPoint.x < 0 || gridPoint.y < 0 || pieces[gridPoint.x, gridPoint.y] == null)
         {
             return null;
         }

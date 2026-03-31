@@ -8,7 +8,7 @@ public class ChessAI : MonoBehaviour
 //    public static ChessAI inst;
    
    public List<GameObject> pieces;
-   public List<GameObject> capturedPieces;
+   public List<GameObject> capturedPieces; 
    public List<Move> bestMoves;
    public List<Move> undoSimulation;
    
@@ -97,16 +97,24 @@ public ChessAI(string name)
         return EvaluateBoard(board);
     }
 
-    List<Move> legalMoves = LegalMoves(maximizingAI);
-    Debug.Log($"depth={depth}, maximizing={maximizingAI}, alpha={alpha}, beta={beta}, legalMoves={legalMoves.Count}");
+    // List<Move> legalMoves = LegalMoves(maximizingAI);
+    Debug.Log("minimax" + depth);
+    // Debug.Log($"depth={depth}, maximizing={maximizingAI}, alpha={alpha}, beta={beta}, legalMoves={legalMoves.Count}");
+    Debug.Log($"depth={depth}, maximizing={maximizingAI}, alpha={alpha}, beta={beta}");
 
-    if (legalMoves.Count == 0)
-    {
-        return EvaluateBoard(board);
-    }
+    // if (legalMoves.Count == 0)
+    // {
+    //     return EvaluateBoard(board);
+    // }
 
     if (maximizingAI)
     {
+        List<Move> legalMoves = LegalMoves(maximizingAI);
+        Debug.Log("count of legal moves of simulated ai: " + legalMoves.Count);
+        if (legalMoves.Count == 0)
+    {
+        return EvaluateBoard(board);
+    }
         float bestScore = float.NegativeInfinity;
 
         foreach (Move m in legalMoves)
@@ -146,6 +154,13 @@ public ChessAI(string name)
     }
     else
     {
+
+        List<Move> legalMoves = LegalMoves(maximizingAI);
+        Debug.Log("count of legal moves of simulated player: " + legalMoves.Count);
+        if (legalMoves.Count == 0)
+    {
+        return EvaluateBoard(board);
+    }
         float bestScore = float.PositiveInfinity;
 
         foreach (Move m in legalMoves)
@@ -179,16 +194,16 @@ public ChessAI(string name)
     }
 }
 
-   List<Move> LegalMoves(bool isP)
+   List<Move> LegalMoves(bool isAI)
    {
-    Debug.Log("elo2");
+    Debug.Log("start legal moves");
 	List<Move> legalMoves = new List<Move>();
     Debug.Log(GameManager.instance.pieces.GetLength(0));
     
 	foreach (GameObject piece in GameManager.instance.pieces)
     {
             
-            if(!GameManager.instance.DoesPieceBelongToCurrentPlayer(piece, isP))
+            if(!GameManager.instance.DoesPieceBelongToCurrentPlayer(piece, isAI))
             {
                 continue;
             }
@@ -214,23 +229,22 @@ public ChessAI(string name)
             Debug.Log(positions.Count);
             foreach (Vector2Int pos in positions)
             {
-                Debug.Log("elo4");
+                Debug.Log("getting moves for each piece for each position ");
                 if(!piece.Equals(null))
                 {
                     Move move = new Move(piece, pos);
-                    Debug.Log("elo5");
                     if(legalMoves!=null)
                     {
                         legalMoves.Add(move);
                     }
                 }
-                Debug.Log("elo6");
+                
 
 
             }
     }
-Debug.Log("elo7 finished legalMoves");
-return legalMoves;
+        Debug.Log("finished legalMoves");
+        return legalMoves;
    }
 
 
@@ -247,7 +261,7 @@ return legalMoves;
 
            if(GameManager.instance.getIsPlayer())
            {
-              if(GameManager.instance.DoesPieceBelongToCurrentPlayer(piece, true))
+              if(GameManager.instance.DoesPieceBelongToCurrentPlayer(piece, false))
               {
                 score += value;
               }
@@ -261,7 +275,7 @@ return legalMoves;
 
            else
            {
-               if(GameManager.instance.DoesPieceBelongToCurrentPlayer(piece, false))
+               if(GameManager.instance.DoesPieceBelongToCurrentPlayer(piece, true))
               {
                 score+= value;
               }
@@ -332,8 +346,8 @@ default:
 
 public void BestMove()
 {
-    bestMoves.Clear();
-    Minimax(GameManager.instance.board, maxPly, float.NegativeInfinity, float.PositiveInfinity, true);
+    // bestMoves.Clear();
+    Minimax(GameManager.instance.board, 2, float.NegativeInfinity, float.PositiveInfinity, true);
     Debug.Log("getting best move" + " pawn forward value:" + forward);
     // if(bestMoves==null)
     // {
@@ -357,20 +371,24 @@ public void BestMove()
     }
     Debug.Log("simulated moves undone");
 
-    List<Move> tempMoves = bestMoves;
-    bestMoves.Clear();
-    Debug.Log("bestMoves cleared");
+    // List<Move> tempMoves = bestMoves;
+    // bestMoves.Clear();
+    // Debug.Log("bestMoves cleared");
     
+    Debug.Log("count of best moves is: " + bestMoves.Count);
+
     
     // if (!moveLocations.Contains(tempMoves[0].position))
     // {
     //     return;
     //    }
 
-        if (GameManager.instance.PieceAtGrid(tempMoves[0].position) == null)
+        // if (GameManager.instance.PieceAtGrid(tempMoves[0].position) == null)
+        if (GameManager.instance.PieceAtGrid(bestMoves[0].position) == null)
         {
             Debug.Log("going to do best move ai without capture");
-            GameManager.instance.Move(tempMoves[0].piece, tempMoves[0].position);
+            // GameManager.instance.Move(tempMoves[0].piece, tempMoves[0].position);
+            GameManager.instance.Move(bestMoves[0].piece, bestMoves[0].position);
             
 
         }   
@@ -378,9 +396,12 @@ public void BestMove()
         else
         {
             Debug.Log("capturing piece");
-            GameManager.instance.CapturePieceAt(tempMoves[tempMoves.Count -1].position);
-            GameManager.instance.Move(tempMoves[tempMoves.Count -1].piece, tempMoves[tempMoves.Count -1].position);
+            // GameManager.instance.CapturePieceAt(tempMoves[tempMoves.Count -1].position);
+            // GameManager.instance.Move(tempMoves[tempMoves.Count -1].piece, tempMoves[tempMoves.Count -1].position);
+            GameManager.instance.CapturePieceAt(bestMoves[bestMoves.Count -1].position);
+            GameManager.instance.Move(bestMoves[bestMoves.Count -1].piece, bestMoves[bestMoves.Count -1].position);
         }
+        
     // return tempMoves[0];
 
     
