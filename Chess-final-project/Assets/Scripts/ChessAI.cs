@@ -54,16 +54,24 @@ public class ChessAI : MonoBehaviour
       
    }
 
+   void Awake()
+{
+    bestMoves = new List<Move>();
+    capturedPieces = new List<GameObject>();
+    undoSimulation = new List<Move>();
+    pieces = new List<GameObject>();
+}
+
 
 
 
 public ChessAI(string name, bool positiveZMovement)
 {
        this.name = name;
-       pieces = new List<GameObject>();
-       capturedPieces = new List<GameObject>();
-       List<Move> undoSimulation = new List<Move>();
-       bestMoves = new List<Move>();
+    //    pieces = new List<GameObject>();
+    //    capturedPieces = new List<GameObject>();
+    //    List<Move> undoSimulation = new List<Move>();
+       
         this.forward = -1;
 
     //    if (positiveZMovement == true)
@@ -79,102 +87,95 @@ public ChessAI(string name, bool positiveZMovement)
 
 
 
-   float Minimax(Board board, float depth, float alpha, float beta, bool maximizingAI)
-   {
-     Debug.Log("minimax" + depth);
-        if (depth == 0) 
-        {    
-            Debug.Log("going to evaluate board");
-            return EvaluateBoard(board);
-        }   //base case
-	List<Move> legalMoves = LegalMoves(maximizingAI);
-    Debug.Log("elo1");
+   float Minimax(Board board, int depth, float alpha, float beta, bool maximizingAI)
+{
     
-    
-       if (maximizingAI)
-       {
-            // List<Move> legalMoves = LegalMoves(true);
-            Debug.Log("the ai has " + legalMoves.Count + " legal moves");
-           float bestScore = float.NegativeInfinity;
-        //     if(bestMoves!=null)
-        //    {
-//but then i tried to make max ply =2
-            bestMoves.Add(legalMoves[0]);
-        //    }
-           int count = 0;
-           foreach (Move m in legalMoves)
-	     {
-		   Vector2Int original = GameManager.instance.GridForPiece(m.piece);
-           if(m.piece == null || m.position == null || count ==0)
-           {
-            continue;
-           }
-           GameManager.instance.Move(m.piece, m.position); //simulate move
-           
+    if (depth == 0)
+    {
+        return EvaluateBoard(board);
+    }
 
-		   Debug.Log("calling minimax");
-            float score = Minimax(GameManager.instance.board, depth-1, alpha, beta, false);
-		   if(score > bestScore)
-		   {
-                Debug.Log("score: " + score + ", best score: " + bestScore);
-		   	    bestMoves.RemoveAt(bestMoves.Count - 1);
-                bestMoves.Add(m);
-                Debug.Log("Replacing best move for count " + count);
+    List<Move> legalMoves = LegalMoves(maximizingAI);
+    Debug.Log($"depth={depth}, maximizing={maximizingAI}, alpha={alpha}, beta={beta}, legalMoves={legalMoves.Count}");
+
+    if (legalMoves.Count == 0)
+    {
+        return EvaluateBoard(board);
+    }
+
+    if (maximizingAI)
+    {
+        float bestScore = float.NegativeInfinity;
+
+        foreach (Move m in legalMoves)
+        {
+            Vector2Int original = GameManager.instance.GridForPiece(m.piece);
+
+            GameManager.instance.Move(m.piece, m.position);
+
+            float score = Minimax(GameManager.instance.board, depth - 1, alpha, beta, false);
+
+            GameManager.instance.Move(m.piece, original);
+
+            if (score > bestScore)
+            {
                 bestScore = score;
+
+                if (depth == maxPly)
+                {
+                    bestMoves.Clear();
+                    bestMoves.Add(m);
+                }
             }
 
-            if(alpha>bestScore)
+            if (bestScore > alpha)
             {
                 alpha = bestScore;
             }
 
-            if(alpha<beta)
+            if (alpha >= beta)
             {
+                Debug.Log($"PRUNE? alpha={alpha}, beta={beta}");
                 break;
             }
-            count++;
-            
-            GameManager.instance.Move(m.piece, original); //unsimulate move
-	    }
-           return bestScore;
-       }
-       else
+        }
+
+        return bestScore;
+    }
+    else
+    {
+        float bestScore = float.PositiveInfinity;
+
+        foreach (Move m in legalMoves)
         {
-           float bestScore = float.PositiveInfinity;
-	    //  List<Move> legalMoves = LegalMoves(false);
-         Debug.Log("the player has " + legalMoves.Count + " legal moves");
+            Vector2Int original = GameManager.instance.GridForPiece(m.piece);
 
-           foreach (Move m in legalMoves)
-	     {
-                Vector2Int original = GameManager.instance.GridForPiece(m.piece);
-               GameManager.instance.Move(m.piece, m.position); //simulate move
-		   
-               float score = Minimax(GameManager.instance.getBoard(), depth-1, alpha, beta, true);
+            GameManager.instance.Move(m.piece, m.position);
 
-            if(bestScore< score)
+            float score = Minimax(GameManager.instance.board, depth - 1, alpha, beta, true);
+
+            GameManager.instance.Move(m.piece, original);
+
+            if (score < bestScore)
             {
                 bestScore = score;
             }
 
-            if(bestScore < beta)
+            if (bestScore < beta)
             {
                 beta = bestScore;
             }
 
-		   if(beta>alpha)
-		   {
-		   	break;
+            if (alpha >= beta)
+            {
+                Debug.Log($"PRUNE? alpha={alpha}, beta={beta}");
+                break;
             }
-            GameManager.instance.Move(m.piece, original); //unsimulate move
-        
-	     }
-          return bestScore;
+        }
 
-
-       }
-         
-   }
-
+        return bestScore;
+    }
+}
 
    List<Move> LegalMoves(bool isP)
    {
@@ -329,13 +330,14 @@ default:
 
 public void BestMove()
 {
-    Minimax(GameManager.instance.board, maxPly, float.NegativeInfinity, float.PositiveInfinity, false);
+    bestMoves.Clear();
+    Minimax(GameManager.instance.board, maxPly, float.NegativeInfinity, float.PositiveInfinity, true);
     Debug.Log("getting best move" + " pawn forward value:" + forward);
-    if(bestMoves==null)
-    {
-        Debug.Log("bestMoves is null");
-        return;
-    }
+    // if(bestMoves==null)
+    // {
+    //     Debug.Log("bestMoves is null");
+    //     return;
+    // }
 
     
     Debug.Log("minimax done");
@@ -351,7 +353,7 @@ public void BestMove()
         GameManager.instance.Move(m.piece, m.position);
         }
     }
-    Debug.Log("similated moves undone");
+    Debug.Log("simulated moves undone");
 
     List<Move> tempMoves = bestMoves;
     bestMoves.Clear();

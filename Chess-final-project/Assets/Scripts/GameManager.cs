@@ -119,7 +119,7 @@ public class GameManager : MonoBehaviour
 
     public void AddPiece(GameObject prefab, Player player, int col, int row)
     {
-        Debug.Log("add piece");
+        // Debug.Log("add piece");
         GameObject pieceObject = board.AddPiece(prefab, col, row);
         player.pieces.Add(pieceObject);
         pieces[col, row] = pieceObject;
@@ -127,9 +127,17 @@ public class GameManager : MonoBehaviour
 
     public void AddPieceAI(GameObject prefab, ChessAI ai, int col, int row)
     {
+        if()
         GameObject pieceObject = board.AddPiece(prefab, col, row);
+        if(pieces == null && pieceObject == null)
+        {
+            return;
+        }
+        
         ai.pieces.Add(pieceObject);
+        
         pieces[col, row] = pieceObject;
+        
     }
 
     public void SelectPieceAtGrid(Vector2Int gridPoint)
@@ -264,7 +272,7 @@ public class GameManager : MonoBehaviour
         {
             return null;
         }
-        Debug.Log("piece at " + gridPoint.x + ", " + gridPoint.y);
+        // Debug.Log("piece at " + gridPoint.x + ", " + gridPoint.y);
         return pieces[gridPoint.x, gridPoint.y];
     }
 

@@ -43,6 +43,8 @@ public class MoveSelector : MonoBehaviour
     private List<Vector2Int> moveLocations;
     private List<GameObject> locationHighlights;
 
+    private int count = 0;
+
     void Start ()
     {
         this.enabled = false;
@@ -54,7 +56,7 @@ public class MoveSelector : MonoBehaviour
     void Update ()
     {
         Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
-
+        
         RaycastHit hit;
         if(GameManager.instance.getIsPlayer())
         {
@@ -95,11 +97,13 @@ public class MoveSelector : MonoBehaviour
         {
                 
                 // tileHighlight.SetActive(false);
+                count++;
                 Debug.Log("ai's turn moveselector: isPlayer is " + GameManager.instance.getIsPlayer());
                 Debug.Log("going to call best move");
-                if(GameManager.instance != null)
+                if(GameManager.instance != null && count ==1)
                 {
                     GameManager.instance.getColorAI().BestMove();
+                    count = 0;
                 }
                 
                 Debug.Log("did best move, and going to switch to player");
