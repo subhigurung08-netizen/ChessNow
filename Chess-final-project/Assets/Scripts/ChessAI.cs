@@ -5,7 +5,7 @@ using UnityEngine;
 
 public class ChessAI : MonoBehaviour
 {
-   public static ChessAI inst;
+//    public static ChessAI inst;
    
    public List<GameObject> pieces;
    public List<GameObject> capturedPieces;
@@ -60,8 +60,8 @@ public class ChessAI : MonoBehaviour
     capturedPieces = new List<GameObject>();
     undoSimulation = new List<Move>();
     pieces = new List<GameObject>();
-    name = "black";
-    forward = -1;
+    // name = "black";
+    // forward = -1;
 }
 
 
@@ -215,7 +215,7 @@ public ChessAI(string name)
             foreach (Vector2Int pos in positions)
             {
                 Debug.Log("elo4");
-                if(!piece.Equals(null) && !pos.Equals(null))
+                if(!piece.Equals(null))
                 {
                     Move move = new Move(piece, pos);
                     Debug.Log("elo5");

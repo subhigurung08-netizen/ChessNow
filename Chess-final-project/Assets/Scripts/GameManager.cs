@@ -62,6 +62,9 @@ public class GameManager : MonoBehaviour
     // public var otherPlayer;
     public bool isPlayer;
 
+    public GameObject player;
+    public GameObject ai;
+
     void Awake()
     {
         instance = this;
@@ -73,10 +76,11 @@ public class GameManager : MonoBehaviour
         pieces = new GameObject[8, 8];
         movedPawns = new List<GameObject>();
 
-        GameObject player = new GameObject();
-        GameObject ai = new GameObject();
+        player = new GameObject();
+        ai = new GameObject();
 
-        white = player.AddComponent<Player>();
+        // white = player.AddComponent<Player>();
+        white = new Player("white", true);
         black = ai.AddComponent<ChessAI>();
         // black = new ChessAI("black");
 
