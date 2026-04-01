@@ -127,12 +127,14 @@ public ChessAI(string name)
             float score = Minimax(GameManager.instance.board, depth - 1, alpha, beta, false);
 
             GameManager.instance.Move(m.piece, original);
+            
 
             if (score > bestScore)
             {
+                Debug.Log("score is greater than best score");
                 bestScore = score;
 
-                if (depth == maxPly)
+                if (depth == 2)
                 {
                     bestMoves.Clear();
                     bestMoves.Add(m);
@@ -350,7 +352,7 @@ default:
 public void BestMove()
 {
     // bestMoves.Clear();
-    Minimax(GameManager.instance.board, 1, float.NegativeInfinity, float.PositiveInfinity, true);
+    Minimax(GameManager.instance.board, 2, float.NegativeInfinity, float.PositiveInfinity, true);
     Debug.Log("getting best move" + " pawn forward value:" + forward);
     // if(bestMoves==null)
     // {
