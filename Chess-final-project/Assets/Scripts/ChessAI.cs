@@ -12,7 +12,7 @@ public class ChessAI : MonoBehaviour
    public List<Move> bestMoves;
    public List<Move> undoSimulation;
    
-   public int maxPly = 2;
+   public int maxPly = 1;
    public int ply;
 //    public GameManager manager;
    public string name;
@@ -111,6 +111,7 @@ public ChessAI(string name)
     {
         List<Move> legalMoves = LegalMoves(maximizingAI);
         Debug.Log("count of legal moves of simulated ai: " + legalMoves.Count);
+        Debug.Log("legal moves are:" + legalMoves);
         if (legalMoves.Count == 0)
     {
         return EvaluateBoard(board);
@@ -135,6 +136,7 @@ public ChessAI(string name)
                 {
                     bestMoves.Clear();
                     bestMoves.Add(m);
+                    Debug.Log("Added best move at maxPly");
                 }
             }
 
@@ -157,6 +159,7 @@ public ChessAI(string name)
 
         List<Move> legalMoves = LegalMoves(maximizingAI);
         Debug.Log("count of legal moves of simulated player: " + legalMoves.Count);
+        Debug.Log("legal moves are:" + legalMoves);
         if (legalMoves.Count == 0)
     {
         return EvaluateBoard(board);
@@ -198,7 +201,7 @@ public ChessAI(string name)
    {
     Debug.Log("start legal moves");
 	List<Move> legalMoves = new List<Move>();
-    Debug.Log(GameManager.instance.pieces.GetLength(0));
+    Debug.Log(GameManager.instance.pieces.GetLength(1));
     
 	foreach (GameObject piece in GameManager.instance.pieces)
     {
@@ -347,7 +350,7 @@ default:
 public void BestMove()
 {
     // bestMoves.Clear();
-    Minimax(GameManager.instance.board, 2, float.NegativeInfinity, float.PositiveInfinity, true);
+    Minimax(GameManager.instance.board, 1, float.NegativeInfinity, float.PositiveInfinity, true);
     Debug.Log("getting best move" + " pawn forward value:" + forward);
     // if(bestMoves==null)
     // {
@@ -362,7 +365,7 @@ public void BestMove()
         Debug.Log("undoing simulation");
     foreach(Move m in undoSimulation)
     {
-        if(m.piece == null || m.position == null)
+        if(m.piece == null)
         {
             continue;
         }

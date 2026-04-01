@@ -789,10 +789,10 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   pieces: []
   capturedPieces: []
-  maxPly: 2
+  maxPly: 1
   ply: 0
   name: Black
-  forward: 0
+  forward: -1
 --- !u!4 &1463427519
 Transform:
   m_ObjectHideFlags: 0

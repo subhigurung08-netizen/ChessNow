@@ -141,17 +141,18 @@ public class GameManager : MonoBehaviour
             Debug.Log("ai is null");
         }
         GameObject pieceObject = board.AddPiece(prefab, col, row);
-        if(pieceObject == null)
-        {
-            Debug.Log("pieceObject is null");
-            return;
-        }
+        // if(pieceObject == null)
+        // {
+        //     Debug.Log("pieceObject is null");
+        //     return;
+        // }
 
         
         
         black.pieces.Add(pieceObject);
         
         pieces[col, row] = pieceObject;
+        
         
     }
 
@@ -272,11 +273,13 @@ public class GameManager : MonoBehaviour
     {
         if(isAI)
         {
+            Debug.Log("checking if piece belongs to AI:" + black.pieces.Contains(piece) +  "and it is ai's turn");
             return black.pieces.Contains(piece);
         }
 
         else
         {
+            Debug.Log("checking if piece belongs to player" + white.pieces.Contains(piece) +  "and it is player's turn");
             return white.pieces.Contains(piece);
         }
     }
