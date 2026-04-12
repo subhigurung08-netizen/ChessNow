@@ -31,47 +31,14 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Pawn : Piece 
+public class Pawn : Piece
 {
-    
     public override List<Vector2Int> MoveLocations(Vector2Int gridPoint)
     {
-        
-        if(gridPoint == null)
-        {
-            return new List<Vector2Int>();
-        }
-        
-        
-        
-        
-        int forwardDirection = 0;
         List<Vector2Int> locations = new List<Vector2Int>();
-        
-        
 
-        if(GameManager.instance.getIsPlayer())
-        {
-            
-            // forwardDirection = GameManager.instance.white.forward;
-            forwardDirection = 1;
-            
-            
-        }
-        
-        else
-        {
-            
-            // forwardDirection = GameManager.instance.black.forward;
-            forwardDirection = -1;
-            
-            
-        }
-
-        
+        int forwardDirection = GameManager.instance.currentPlayer.forward;
         Vector2Int forwardOne = new Vector2Int(gridPoint.x, gridPoint.y + forwardDirection);
-        
-        //GameManager.instance. Piece...
         if (GameManager.instance.PieceAtGrid(forwardOne) == false)
         {
             locations.Add(forwardOne);
