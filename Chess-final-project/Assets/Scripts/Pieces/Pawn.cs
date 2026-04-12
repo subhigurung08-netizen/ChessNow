@@ -37,7 +37,20 @@ public class Pawn : Piece
     {
         List<Vector2Int> locations = new List<Vector2Int>();
 
-        int forwardDirection = GameManager.instance.currentPlayer.forward;
+        // int forwardDirection = GameManager.instance.currentPlayer.forward;
+        //can't use this since now currentPlayer is always just the white piece since the black pieces are always the ai
+        int forwardDirection = 1;
+        if(GameManager.instance.GetIsAI())
+        {
+            forwardDirection = -1;
+        }
+
+        else
+        {
+            forwardDirection = 1;
+        }
+        //added if else statement to assign forwardDirection based on isAI
+
         Vector2Int forwardOne = new Vector2Int(gridPoint.x, gridPoint.y + forwardDirection);
         if (GameManager.instance.PieceAtGrid(forwardOne) == false)
         {

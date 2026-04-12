@@ -97,6 +97,12 @@ public class GameManager : MonoBehaviour
         return white;
     }
 
+    //added GetPiecesGM for other methods in other classes to access pieces 2D array
+    public GameObject[,] GetPiecesGM()
+    {
+        return pieces;
+    }
+
 
     private void InitialSetup()
     {
@@ -177,8 +183,11 @@ public class GameManager : MonoBehaviour
         }
 
         Vector2Int startGridPoint = GridForPiece(piece);
+        // Debug.Log("the starting position of this piece is: x: " + startGridPoint.x + " and y: " + gridPoint.y);
+        //debug to find cause of index error
         pieces[startGridPoint.x, startGridPoint.y] = null;
         pieces[gridPoint.x, gridPoint.y] = piece;
+        Debug.Log("piece moved to: x: " + gridPoint.x + "and y: " + gridPoint.y);
         board.MovePiece(piece, gridPoint);
     }
 
@@ -197,13 +206,41 @@ public class GameManager : MonoBehaviour
         GameObject pieceToCapture = PieceAtGrid(gridPoint);
         if (pieceToCapture.GetComponent<Piece>().type == PieceType.King)
         {
-            Debug.Log(currentPlayer.name + " wins!");
+            // Debug.Log(currentPlayer.name + " wins!");
+            //does not work if ai wins so replacing it
+            if(isAI)
+            {
+                Debug.Log(ChessAI.inst.GetName() + " wins!");
+            }
+
+            else
+            {
+                Debug.Log(currentPlayer.name + " wins!");
+            }
+            
             Destroy(board.GetComponent<TileSelector>());
             Destroy(board.GetComponent<MoveSelector>());
+
         }
-        currentPlayer.capturedPieces.Add(pieceToCapture);
+        
+        
+        // currentPlayer.capturedPieces.Add(pieceToCapture);
+        //replaced this with if else statement since current player is only applicable when isAI is false
+        if(isAI)
+        {
+            ChessAI.inst.GetCapturedPiecesAI().Add(pieceToCapture);
+
+        }
+
+        else
+        {
+            currentPlayer.capturedPieces.Add(pieceToCapture);
+        }
         pieces[gridPoint.x, gridPoint.y] = null;
         Destroy(pieceToCapture);
+        Debug.Log("a piece was destroyed");
+        //adding debug log to see whether piece was destroyed 
+
     }
 
     public void SelectPiece(GameObject piece)
@@ -218,7 +255,18 @@ public class GameManager : MonoBehaviour
 
     public bool DoesPieceBelongToCurrentPlayer(GameObject piece)
     {
-        return currentPlayer.pieces.Contains(piece);
+        //return currentPlayer.pieces.Contains(piece);
+        //replacing this because current player only applicable when isAI is false
+
+        if(isAI)
+        {
+            return ChessAI.inst.GetPiecesAI().Contains(piece);
+        }
+
+        else
+        {
+            return currentPlayer.pieces.Contains(piece);
+        }
     }
 
     public GameObject PieceAtGrid(Vector2Int gridPoint)
@@ -254,9 +302,27 @@ public class GameManager : MonoBehaviour
             return false;
         }
 
-        if (otherPlayer.pieces.Contains(piece))
+        // if (otherPlayer.pieces.Contains(piece))
+        // {
+        //     return false;
+        // }
+        
+        //replacing above if statement since other player variable is no longer valid 
+
+        if(isAI)
         {
-            return false;
+            if(!ChessAI.inst.GetPiecesAI().Contains(piece))
+            {
+                return false;
+            }
+        }
+
+        else
+        {
+            if(ChessAI.inst.GetPiecesAI().Contains(piece))
+            {
+                return false;
+            }
         }
 
         return true;
@@ -264,9 +330,11 @@ public class GameManager : MonoBehaviour
 
     public void NextPlayer()
     {
-        Player tempPlayer = currentPlayer;
-        currentPlayer = otherPlayer;
-        otherPlayer = tempPlayer;
+        // Player tempPlayer = currentPlayer;
+        // currentPlayer = otherPlayer;
+        // otherPlayer = tempPlayer;
+        
+        //current player should remain the same
 
 
         //Adding if and else statements to change isAI when turn switches
@@ -280,6 +348,9 @@ public class GameManager : MonoBehaviour
             isAI = true;
             //calling BestMove() to start ai's turn
             ChessAI.inst.BestMove();
+            //after ai moves then isAI goes back to false
+            isAI = false;
+            
         }
 
     }

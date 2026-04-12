@@ -30,8 +30,23 @@ public class ChessAI: MonoBehaviour
         capturedPieces = new List<GameObject>();
         undoSimulation = new List<Move>();
         pieces = new List<GameObject>();
-        maxPly =1;
+        maxPly = 5;
         inst = GetComponent<ChessAI>();
+    }
+
+    public List<GameObject> GetPiecesAI()
+    {
+        return pieces;
+    }
+
+    public List<GameObject> GetCapturedPiecesAI()
+    {
+        return capturedPieces;
+    }
+
+    public string GetName()
+    {
+        return "ai";
     }
 
     float Minimax(Board board, int depth, float alpha, float beta, bool maximizingAI)
@@ -42,6 +57,7 @@ public class ChessAI: MonoBehaviour
         }
 
         List<Move> legalMoves = LegalMoves(maximizingAI);
+        Debug.Log($"depth={depth}, maximizing={maximizingAI}, alpha={alpha}, beta={beta}, legalMoves={legalMoves.Count}");
 
         if (legalMoves.Count == 0)
         {
@@ -55,21 +71,43 @@ public class ChessAI: MonoBehaviour
             foreach (Move m in legalMoves)
             {
                 Vector2Int original = GameManager.instance.GridForPiece(m.piece);
-
-                GameManager.instance.Move(m.piece, m.position);
-
-                float score = Minimax(GameManager.instance.board, depth - 1, alpha, beta, false);
-
-                GameManager.instance.Move(m.piece, original);
-
-                if (score > bestScore)
+                if(GameManager.instance.PieceAtGrid(m.position) != false)
                 {
-                    bestScore = score;
+                    GameObject ogPiece = GameManager.instance.PieceAtGrid(m.position);
 
-                    if (depth == maxPly)
+                    GameManager.instance.Move(m.piece, m.position);
+                    float score = Minimax(GameManager.instance.board, depth - 1, alpha, beta, false);
+
+                    GameManager.instance.Move(m.piece, original);
+                    GameManager.instance.GetPiecesGM()[m.position.x, m.position.y] = ogPiece;
+
+                    if (score > bestScore)
                     {
-                        bestMoves.Clear();
-                        bestMoves.Add(m);
+                        bestScore = score;
+
+                        if (depth == maxPly)
+                        {
+                            bestMoves.Clear();
+                            bestMoves.Add(m);
+                        }
+                    }
+                }
+
+                else
+                {
+                    GameManager.instance.Move(m.piece, m.position);
+                    float score = Minimax(GameManager.instance.board, depth - 1, alpha, beta, false);
+                    GameManager.instance.Move(m.piece, original);
+
+                    if (score > bestScore)
+                    {
+                        bestScore = score;
+
+                        if (depth == maxPly)
+                        {
+                            bestMoves.Clear();
+                            bestMoves.Add(m);
+                        }
                     }
                 }
 
@@ -80,6 +118,7 @@ public class ChessAI: MonoBehaviour
 
                 if (alpha >= beta)
                 {
+                    Debug.Log($"PRUNE? alpha={alpha}, beta={beta}");
                     break;
                 }
             }
@@ -95,15 +134,34 @@ public class ChessAI: MonoBehaviour
             {
                 Vector2Int original = GameManager.instance.GridForPiece(m.piece);
 
-                GameManager.instance.Move(m.piece, m.position);
-
-                float score = Minimax(GameManager.instance.board, depth - 1, alpha, beta, true);
-
-                GameManager.instance.Move(m.piece, original);
-
-                if (score < bestScore)
+                if(GameManager.instance.PieceAtGrid(m.position) != false)
                 {
-                    bestScore = score;
+                    GameObject ogPiece = GameManager.instance.PieceAtGrid(m.position);
+
+                    GameManager.instance.Move(m.piece, m.position);
+                    float score = Minimax(GameManager.instance.board, depth - 1, alpha, beta, true);
+
+                    GameManager.instance.Move(m.piece, original);
+                    GameManager.instance.GetPiecesGM()[m.position.x, m.position.y] = ogPiece;
+
+                    if (score < bestScore)
+                    {
+                        bestScore = score;
+                    }
+
+                }
+
+                else
+                {
+                    GameManager.instance.Move(m.piece, m.position);
+                    float score = Minimax(GameManager.instance.board, depth - 1, alpha, beta, true);
+
+                    GameManager.instance.Move(m.piece, original);
+
+                    if (score < bestScore)
+                    {
+                        bestScore = score;
+                    }
                 }
 
                 if (bestScore < beta)
@@ -113,6 +171,7 @@ public class ChessAI: MonoBehaviour
 
                 if (alpha >= beta)
                 {
+                    Debug.Log($"PRUNE? alpha={alpha}, beta={beta}");
                     break;
                 }
             }
@@ -128,23 +187,30 @@ public class ChessAI: MonoBehaviour
         List<Move> legalMoves = new List<Move>();
         if(isAI)
         {
-            foreach(GameObject piece in pieces)
+            Debug.Log("The number of ai pieces is " + pieces.Count);
+            foreach(GameObject piece in GameManager.instance.GetPiecesGM())
             {
-                foreach(Vector2Int pos in GameManager.instance.MovesForPiece(piece))
+                if(pieces.Contains(piece))
                 {
-                    legalMoves.Add(new Move(piece,pos));
+                    Debug.Log("The number of positions this ai piece can move is:" + GameManager.instance.MovesForPiece(piece).Count);
+                    foreach(Vector2Int pos in GameManager.instance.MovesForPiece(piece))
+                    {
+                        legalMoves.Add(new Move(piece,pos));
+                    }
                 }
-
             }
         }
 
         else
         {
-            foreach(GameObject piece in GameManager.instance.GetPlayer().pieces)
+            foreach(GameObject piece in GameManager.instance.GetPiecesGM())
             {
-                foreach(Vector2Int pos in GameManager.instance.MovesForPiece(piece))
+                if(GameManager.instance.GetPlayer().pieces.Contains(piece))
                 {
-                    legalMoves.Add(new Move(piece,pos));
+                    foreach(Vector2Int pos in GameManager.instance.MovesForPiece(piece))
+                    {
+                        legalMoves.Add(new Move(piece,pos));
+                    }
                 }
 
             }
@@ -163,7 +229,6 @@ public class ChessAI: MonoBehaviour
       foreach(GameObject piece in GameManager.instance.pieces)
       {
           int value = GetPieceValue(piece);
-           Debug.Log("got piece value");
 
 
         //   if(GameManager.instance.getIsPlayer())
@@ -250,10 +315,24 @@ public class ChessAI: MonoBehaviour
 
 
 
-    public Move BestMove()
+    public void BestMove()
     {
         bestMoves.Clear();
-        Minimax(GameManager.instance.board, maxPly, float.NegativeInfinity, float.PositiveInfinity, true);
-        return bestMoves[0];
+        float score = Minimax(GameManager.instance.board, maxPly, float.NegativeInfinity, float.PositiveInfinity, true);
+        Debug.Log("" + GameManager.instance.PieceAtGrid(bestMoves[0].position));
+
+        if (GameManager.instance.PieceAtGrid(bestMoves[0].position) == null)
+        {
+            Debug.Log("ai does not capture and best move to: x: " + bestMoves[0].position.x + " and y: " + bestMoves[0].position.y);
+            GameManager.instance.Move(bestMoves[0].piece, bestMoves[0].position);
+            Score.instan.ScoreUpdate(score);
+        }
+        else
+        {
+            Debug.Log("ai captures and best move to: x: " + bestMoves[0].position.x + " and y: " + bestMoves[0].position.y);
+            GameManager.instance.CapturePieceAt(bestMoves[0].position);
+            GameManager.instance.Move(bestMoves[0].piece, bestMoves[0].position);
+            Score.instan.ScoreUpdate(score);
+        }
     }
 }
