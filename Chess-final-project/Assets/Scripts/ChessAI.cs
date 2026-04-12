@@ -123,10 +123,35 @@ public class ChessAI: MonoBehaviour
 
 
 
-    List<Move> LegalMoves(bool ifAI)
+    List<Move> LegalMoves(bool isAI)
     {
         List<Move> legalMoves = new List<Move>();
-        return new List<Move>();
+        if(isAI)
+        {
+            foreach(GameObject piece in pieces)
+            {
+                foreach(Vector2Int pos in GameManager.instance.MovesForPiece(piece))
+                {
+                    legalMoves.Add(new Move(piece,pos));
+                }
+
+            }
+        }
+
+        else
+        {
+            foreach(GameObject piece in GameManager.instance.GetPlayer().pieces)
+            {
+                foreach(Vector2Int pos in GameManager.instance.MovesForPiece(piece))
+                {
+                    legalMoves.Add(new Move(piece,pos));
+                }
+
+            }
+        }
+
+        return legalMoves;
+
     }
 
 

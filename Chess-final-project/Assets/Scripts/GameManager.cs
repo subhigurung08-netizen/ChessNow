@@ -85,10 +85,16 @@ public class GameManager : MonoBehaviour
         InitialSetup();
     }
 
-    //added GetIsAI method for other methods to access isAI attribute
+    //added GetIsAI method for other methods in other classes to access isAI attribute
     public bool GetIsAI()
     {
         return isAI;
+    }
+
+    //added GetPlayer method for other methods in other classes to access player
+    public Player GetPlayer()
+    {
+        return white;
     }
 
 
