@@ -53,7 +53,8 @@ public class GameManager : MonoBehaviour
 
     // private GameObject[,] pieces;
     public GameObject[,] pieces;
-    private List<GameObject> movedPawns;
+    // private List<GameObject> movedPawns;
+    public List<GameObject> movedPawns;
 
     private Player white;
     private Player black;
@@ -177,9 +178,13 @@ public class GameManager : MonoBehaviour
     public void Move(GameObject piece, Vector2Int gridPoint)
     {
         Piece pieceComponent = piece.GetComponent<Piece>();
-        if (pieceComponent.type == PieceType.Pawn && !HasPawnMoved(piece))
+        //trying to fix possible moves for pawns
+        if(!isAI)
         {
-            movedPawns.Add(piece);
+            if (pieceComponent.type == PieceType.Pawn && !HasPawnMoved(piece))
+            {
+                movedPawns.Add(piece);
+            }
         }
 
         Vector2Int startGridPoint = GridForPiece(piece);
@@ -187,7 +192,7 @@ public class GameManager : MonoBehaviour
         //debug to find cause of index error
         pieces[startGridPoint.x, startGridPoint.y] = null;
         pieces[gridPoint.x, gridPoint.y] = piece;
-        Debug.Log("piece moved to: x: " + gridPoint.x + "and y: " + gridPoint.y);
+        // Debug.Log("piece moved to: x: " + gridPoint.x + "and y: " + gridPoint.y);
         board.MovePiece(piece, gridPoint);
     }
 

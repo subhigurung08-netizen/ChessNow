@@ -67,10 +67,16 @@ public class ChessAI: MonoBehaviour
         if (maximizingAI)
         {
             float bestScore = float.NegativeInfinity;
+            // bool undoPawn = false;
+            //need to undo adding pawns moved only in simultion from movedPawns list
 
             foreach (Move m in legalMoves)
             {
                 Vector2Int original = GameManager.instance.GridForPiece(m.piece);
+                // if(m.piece.GetComponent<Piece>().type == PieceType.Pawn && !GameManager.instance.HasPawnMoved(m.piece))
+                // {
+                //     undoPawn = true;
+                // }
                 if(GameManager.instance.PieceAtGrid(m.position) != false)
                 {
                     GameObject ogPiece = GameManager.instance.PieceAtGrid(m.position);
@@ -80,6 +86,8 @@ public class ChessAI: MonoBehaviour
 
                     GameManager.instance.Move(m.piece, original);
                     GameManager.instance.GetPiecesGM()[m.position.x, m.position.y] = ogPiece;
+
+                    
 
                     if (score > bestScore)
                     {
@@ -111,6 +119,10 @@ public class ChessAI: MonoBehaviour
                     }
                 }
 
+                // if(undoPawn)
+                // {
+                //     GameManager.instance.movedPawns.Remove(m.piece);
+                // }
                 if (bestScore > alpha)
                 {
                     alpha = bestScore;
@@ -129,10 +141,16 @@ public class ChessAI: MonoBehaviour
         else
         {
             float bestScore = float.PositiveInfinity;
+            //need to undo adding pawns moved only in simultion from movedPawns list
+            // bool undoPawn = false;
 
             foreach (Move m in legalMoves)
             {
                 Vector2Int original = GameManager.instance.GridForPiece(m.piece);
+                // if(m.piece.GetComponent<Piece>().type == PieceType.Pawn && !GameManager.instance.HasPawnMoved(m.piece))
+                // {
+                //     undoPawn = true;
+                // }
 
                 if(GameManager.instance.PieceAtGrid(m.position) != false)
                 {
@@ -163,6 +181,11 @@ public class ChessAI: MonoBehaviour
                         bestScore = score;
                     }
                 }
+
+                // if(undoPawn)
+                // {
+                //     GameManager.instance.movedPawns.Remove(m.piece);
+                // }
 
                 if (bestScore < beta)
                 {
@@ -320,6 +343,11 @@ public class ChessAI: MonoBehaviour
         bestMoves.Clear();
         float score = Minimax(GameManager.instance.board, maxPly, float.NegativeInfinity, float.PositiveInfinity, true);
         Debug.Log("" + GameManager.instance.PieceAtGrid(bestMoves[0].position));
+
+        if(bestMoves[0].piece.GetComponent<Piece>().type == PieceType.Pawn && !GameManager.instance.HasPawnMoved(bestMoves[0].piece))
+        {
+            GameManager.instance.movedPawns.Add(bestMoves[0].piece);
+        }
 
         if (GameManager.instance.PieceAtGrid(bestMoves[0].position) == null)
         {

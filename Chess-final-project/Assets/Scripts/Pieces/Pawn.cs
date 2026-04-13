@@ -58,6 +58,18 @@ public class Pawn : Piece
         }
 
         Vector2Int forwardTwo = new Vector2Int(gridPoint.x, gridPoint.y + 2 * forwardDirection);
+        
+        if(GameManager.instance.HasPawnMoved(gameObject)==false)
+        {
+            Debug.Log("This pawn has not moved");
+        }
+        if(GameManager.instance.PieceAtGrid(forwardTwo) == false)
+        {
+            Debug.Log("There is a piece two spaces forward from pawn");
+        }
+        
+        //checking why unmoved pawns can't move 2 spaces after first move
+
         if (GameManager.instance.HasPawnMoved(gameObject) == false && GameManager.instance.PieceAtGrid(forwardTwo) == false)
         {
             locations.Add(forwardTwo);
