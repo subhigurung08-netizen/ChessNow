@@ -98,3 +98,4 @@ InitTestScene*.unity*
 # Auto-generated scenes by play mode tests
 /[Aa]ssets/[Ii]nit[Tt]est[Ss]cene*.unity*
 Chess-final-project/Library/Bee/artifacts/WebGL/il2cppOutput/build/GameAssembly.a
+Chess-final-project/Library/Bee/artifacts/WebGL/GameAssembly/release_WebGL_wasm/GameAssembly.a
