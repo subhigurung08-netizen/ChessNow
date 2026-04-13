@@ -5,7 +5,6 @@ using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 
 public class SwitchScenes : MonoBehaviour
-
 {
     public Button start;
 
@@ -14,12 +13,6 @@ public class SwitchScenes : MonoBehaviour
     {
         Button b = start.GetComponent<Button>();
         b.onClick.AddListener(startGame);
-    }
-
-    // Update is called once per frame
-    void Update()
-    {
-        
     }
 
     void startGame()

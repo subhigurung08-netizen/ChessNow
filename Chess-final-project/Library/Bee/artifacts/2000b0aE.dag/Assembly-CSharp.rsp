@@ -361,10 +361,13 @@
 "Assets/Scripts/Pieces/Queen.cs"
 "Assets/Scripts/Pieces/Rook.cs"
 "Assets/Scripts/Player.cs"
-"Assets/Scripts/Score.cs"
-"Assets/Scripts/ScoreContoller.cs"
-"Assets/Scripts/SwitchScenes.cs"
 "Assets/Scripts/TileSelector.cs"
+"Assets/Scripts/UI/Exit.cs"
+"Assets/Scripts/UI/RestartMain.cs"
+"Assets/Scripts/UI/Score.cs"
+"Assets/Scripts/UI/ScoreContoller.cs"
+"Assets/Scripts/UI/SwitchScenes.cs"
+"Assets/Scripts/UI/Win.cs"
 -langversion:9.0
 /deterministic
 /optimize+

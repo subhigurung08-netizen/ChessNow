@@ -11,7 +11,7 @@ public class Score : MonoBehaviour
     private void Awake()
     {
         scoreText = GetComponent<TMP_Text>();
-        scoreText.text = "Score: 0";
+        scoreText.text = "SCORE: 0";
         instan = GetComponent<Score>();
     }
 
@@ -19,6 +19,6 @@ public class Score : MonoBehaviour
     public void ScoreUpdate(float score)
     {
         float playerScore = score * -1;
-        scoreText.text = $"Score: {playerScore}";
+        scoreText.text = $"SCORE: {playerScore}";
     }
 }

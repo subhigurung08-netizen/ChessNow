@@ -30,7 +30,7 @@ public class ChessAI: MonoBehaviour
         capturedPieces = new List<GameObject>();
         undoSimulation = new List<Move>();
         pieces = new List<GameObject>();
-        maxPly = 5;
+        maxPly = 3;
         inst = GetComponent<ChessAI>();
     }
 
@@ -46,7 +46,7 @@ public class ChessAI: MonoBehaviour
 
     public string GetName()
     {
-        return "ai";
+        return "AI";
     }
 
     float Minimax(Board board, int depth, float alpha, float beta, bool maximizingAI)

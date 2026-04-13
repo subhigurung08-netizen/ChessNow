@@ -73,7 +73,7 @@ public class GameManager : MonoBehaviour
         pieces = new GameObject[8, 8];
         movedPawns = new List<GameObject>();
 
-        white = new Player("white", true);
+        white = new Player("PLAYER", true);
         black = new Player("black", false);
 
         currentPlayer = white;
@@ -211,11 +211,14 @@ public class GameManager : MonoBehaviour
             if(isAI)
             {
                 Debug.Log(ChessAI.inst.GetName() + " wins!");
+                
+                Win.instWin.ShowWinner(ChessAI.inst.GetName());
             }
 
             else
             {
                 Debug.Log(currentPlayer.name + " wins!");
+                Win.instWin.ShowWinner(currentPlayer.name);
             }
             
             Destroy(board.GetComponent<TileSelector>());
@@ -242,6 +245,7 @@ public class GameManager : MonoBehaviour
         //adding debug log to see whether piece was destroyed 
 
     }
+
 
     public void SelectPiece(GameObject piece)
     {
